@@ -169,7 +169,7 @@
     // Load persisted data
     let trades = JSON.parse(localStorage.getItem(STORAGE_TRADES)) || [];
     let totalProfit = parseFloat(localStorage.getItem(STORAGE_PROFIT));
-    if (isNaN(totalProfit)) { 
+    if (isNaN(totalProfit)) {
       totalProfit = 1280.66;
     }
 
@@ -196,8 +196,8 @@
         const cls      = data.profit >= 0 ? 'positive' : 'negative';
         const sign     = data.profit >= 0 ? '+' : '';
         const refId    = formatRefId(data.refId);
-        // If loss, show contract value as 0.00
-        const displayContract = data.profit < 0 ? 0 : data.contractValue;
+        // Compute contract value as stake + profit
+        const displayContract = data.stake + data.profit;
         const row =
           `<tr>
             <td><i class="fas fa-chart-line"></i></td>
@@ -229,8 +229,8 @@
       const cls      = data.profit >= 0 ? 'positive' : 'negative';
       const sign     = data.profit >= 0 ? '+' : '';
       const refId    = formatRefId(data.refId);
-      // If loss, set contract value to 0
-      const displayContract = data.profit < 0 ? 0 : data.contractValue;
+      // Compute contract value as stake + profit
+      const displayContract = data.stake + data.profit;
       const row =
         `<tr>
           <td><i class="fas fa-chart-line"></i></td>
