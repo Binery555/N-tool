@@ -1,15 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>Untitled</title>
-  
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Binary Profit Table (Frontend)</title>
@@ -206,6 +196,8 @@
         const cls      = data.profit >= 0 ? 'positive' : 'negative';
         const sign     = data.profit >= 0 ? '+' : '';
         const refId    = formatRefId(data.refId);
+        // If loss, show contract value as 0.00
+        const displayContract = data.profit < 0 ? 0 : data.contractValue;
         const row =
           `<tr>
             <td><i class="fas fa-chart-line"></i></td>
@@ -214,7 +206,7 @@
             <td>${fmtDate(buyDate)}<br><span class="time">${fmtTime(buyDate)} GMT</span></td>
             <td>${data.stake.toFixed(2)}</td>
             <td>${fmtDate(sellDate)}<br><span class="time">${fmtTime(sellDate)} GMT</span></td>
-            <td>${data.contractValue.toFixed(2)}</td>
+            <td>${displayContract.toFixed(2)}</td>
             <td class="${cls}">${sign}${data.profit.toFixed(2)}</td>
           </tr>`;
         tbody.insertAdjacentHTML('afterbegin', row);
@@ -237,6 +229,8 @@
       const cls      = data.profit >= 0 ? 'positive' : 'negative';
       const sign     = data.profit >= 0 ? '+' : '';
       const refId    = formatRefId(data.refId);
+      // If loss, set contract value to 0
+      const displayContract = data.profit < 0 ? 0 : data.contractValue;
       const row =
         `<tr>
           <td><i class="fas fa-chart-line"></i></td>
@@ -245,7 +239,7 @@
           <td>${fmtDate(buyDate)}<br><span class="time">${fmtTime(buyDate)} GMT</span></td>
           <td>${data.stake.toFixed(2)}</td>
           <td>${fmtDate(sellDate)}<br><span class="time">${fmtTime(sellDate)} GMT</span></td>
-          <td>${data.contractValue.toFixed(2)}</td>
+          <td>${displayContract.toFixed(2)}</td>
           <td class="${cls}">${sign}${data.profit.toFixed(2)}</td>
         </tr>`;
       tbody.insertAdjacentHTML('afterbegin', row);
@@ -266,9 +260,5 @@
     const profitChannel = new BroadcastChannel('trade-profits');
     profitChannel.onmessage = ({ data }) => addTrade(data);
   </script>
-</body>
-</html>
-<!-- partial -->
-  
 </body>
 </html>
