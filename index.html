@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
   <style>
     :root {
-      --sidebar-bg:     #000000;
-      --main-bg:        #000000;
-      --header-bg:      #000000;
+      --sidebar-bg:     #0e0e0e;
+      --main-bg:        #0e0e0e;
+      --header-bg:      #0e0e0e;
       --text-primary:   #ffffff;
       --text-secondary: #cccccc;
       --accent-positive:#00d0b2;
@@ -31,7 +31,7 @@
     main.main { flex: 1; padding: 20px; display: flex; flex-direction: column; }
     .table-container {
       flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
-      background-color: #000; max-height: calc(100vh - 50px);
+      background-color: var(--main-bg); max-height: calc(100vh - 50px);
     }
     .table-container::-webkit-scrollbar { display: none; }
     table { width: 100%; border-collapse: collapse; min-width: 900px; }
@@ -48,7 +48,7 @@
     .type-logo {
       width: 1.5cm;    /* requested physical size */
       height: 1cm;
-      max-width: 120px;  /* sensible fallback for some browsers */
+      max-width: 120px;
       max-height: 80px;
       display: block;
       object-fit: contain;
@@ -112,7 +112,6 @@
 
   <script>
     // ==== CONFIGURABLE: PNG logo links for the "Type" column ====
-    // Add/remove your own PNG links here. You can also set window.TYPE_LOGOS = [...] from console.
     window.TYPE_LOGOS = [
       "https://iili.io/KxDwyen.png",
       "https://iili.io/KxDOC4p.png"
@@ -128,7 +127,6 @@
     let totalProfit = parseFloat(localStorage.getItem(STORAGE_PROFIT));
     if (isNaN(totalProfit)) totalProfit = 3659.96;
 
-    // UTC/GMT formatters
     const fmtDate = d => new Intl.DateTimeFormat('en-GB', {
       day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC'
     }).format(d);
@@ -137,7 +135,6 @@
       hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC'
     }).format(d);
 
-    // Ref ID: must start with '14' and be exactly 12 digits total => '14' + 10 random digits
     function formatRefId() {
       let rest = '';
       for (let i = 0; i < 10; i++) rest += Math.floor(Math.random() * 10);
@@ -152,7 +149,6 @@
     }
 
     function rowHTML(data) {
-      // ensure UTC times exist (live default to "now" if not provided)
       const buyDate  = data.buyTime ? new Date(data.buyTime)  : new Date();
       const sellDate = data.sellTime ? new Date(data.sellTime) : new Date();
 
@@ -192,7 +188,6 @@
     }
 
     function addTrade(data) {
-      // fallback defaults if some fields missing when live-updating
       data = {
         stake:  Number(data?.stake ?? 0),
         profit: Number(data?.profit ?? 0),
@@ -214,11 +209,9 @@
     renderSavedTrades();
     updateTotalProfitDisplay();
 
-    // Live updates channel (send {stake, profit, buyTime?, sellTime?, logo?})
     const profitChannel = new BroadcastChannel('trade-profits');
     profitChannel.onmessage = ({ data }) => addTrade(data);
 
-    // Demo (remove in production): uncomment to test a random row every 4s
     /*
     setInterval(() => {
       const p = (Math.random() > 0.5 ? 1 : -1) * (5 + Math.random() * 50);
